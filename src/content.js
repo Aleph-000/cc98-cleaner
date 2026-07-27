@@ -6,6 +6,8 @@ const DEFAULTS = {
   filterThreshold: 0.56,
   hideNegativeRatings: true,
   showHiddenNotice: false,
+  boardFilterEnabled: false,
+  selectedBoardIds: [68],
 };
 
 let settings = { ...DEFAULTS };
@@ -14,6 +16,7 @@ let nextId = 1;
 let flushTimer = null;
 const queued = [];
 const pending = new Map();
+let filterActive = true;
 
 function textKey(text) {
   let hash = 2166136261;
@@ -153,7 +156,7 @@ function showModelError(error) {
 }
 
 function processReply(reply) {
-  if (!settings.enabled || reply.dataset.cc98CleanerQueued) return;
+  if (!settings.enabled || !filterActive || reply.dataset.cc98CleanerQueued) return;
   const text = extractReplyText(reply);
   if (!text) return;
 
@@ -196,12 +199,51 @@ function hideNegativeRatings(root = document) {
 }
 
 function scan(root = document) {
+  if (!filterActive) return;
   hideNegativeRatings(root);
   const replies = [
     ...(root.matches?.('div.reply') ? [root] : []),
     ...(root.querySelectorAll?.('div.reply') || []),
   ];
   replies.forEach(processReply);
+}
+
+function currentBoardId() {
+  const value = Number(document.documentElement?.dataset.cc98CleanerBoardId);
+  return Number.isInteger(value) ? value : null;
+}
+
+function boardIsSelected() {
+  if (!settings.boardFilterEnabled) return true;
+  const boardId = currentBoardId();
+  return boardId !== null && settings.selectedBoardIds.includes(boardId);
+}
+
+function resetPageDecisions() {
+  queued.length = 0;
+  pending.clear();
+  clearTimeout(flushTimer);
+  document.querySelectorAll('.cc98-cleaner-placeholder').forEach((node) => node.remove());
+  document.querySelectorAll('div.reply[data-cc98-cleaner-queued]').forEach((reply) => {
+    reply.style.display = '';
+    delete reply.dataset.cc98CleanerQueued;
+    delete reply.dataset.cc98CleanerDecision;
+    delete reply.dataset.cc98CleanerId;
+    delete reply.dataset.cc98CleanerScore;
+    delete reply.dataset.cc98CleanerReason;
+  });
+}
+
+function updateBoardActivation() {
+  const next = settings.enabled && boardIsSelected();
+  if (next === filterActive) return;
+  filterActive = next;
+  if (filterActive) {
+    scan();
+    if (settings.modelEnabled) chrome.runtime.sendMessage({ type: 'WARMUP' }).catch(() => {});
+  } else {
+    resetPageDecisions();
+  }
 }
 
 async function start() {
@@ -211,18 +253,32 @@ async function start() {
     ...DEFAULTS,
     ...sync,
     filterThreshold: Number.isFinite(sync.filterThreshold) ? sync.filterThreshold : legacyThreshold,
+    selectedBoardIds: Array.isArray(sync.selectedBoardIds)
+      ? sync.selectedBoardIds.map(Number).filter(Number.isInteger)
+      : DEFAULTS.selectedBoardIds,
   };
   const local = await chrome.storage.local.get({ overrides: {} });
   overrides = local.overrides || {};
-  scan();
+  filterActive = settings.enabled && boardIsSelected();
+  if (filterActive) scan();
   new MutationObserver((mutations) => {
     for (const mutation of mutations) {
+      if (mutation.type === 'attributes') {
+        updateBoardActivation();
+        continue;
+      }
       for (const node of mutation.addedNodes) {
         if (node.nodeType === Node.ELEMENT_NODE) scan(node);
       }
     }
-  }).observe(document.documentElement, { childList: true, subtree: true });
-  if (settings.modelEnabled) chrome.runtime.sendMessage({ type: 'WARMUP' }).catch(() => {});
+  }).observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['data-cc98-cleaner-board-id'],
+  });
+  document.addEventListener('cc98-cleaner-board-change', updateBoardActivation);
+  if (filterActive && settings.modelEnabled) chrome.runtime.sendMessage({ type: 'WARMUP' }).catch(() => {});
 }
 
 start().catch(showModelError);

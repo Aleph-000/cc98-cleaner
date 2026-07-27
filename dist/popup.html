@@ -13,6 +13,12 @@
     <label><input id="modelEnabled" type="checkbox"> 启用本地 BGE 模型</label>
     <label><input id="hideNegativeRatings" type="checkbox"> 隐藏“风评值 -1”记录</label>
     <label><input id="showHiddenNotice" type="checkbox"> 显示被隐藏评论的提示和查看按钮</label>
+    <label><input id="boardFilterEnabled" type="checkbox"> 仅在所选版面过滤</label>
+    <details id="boardPicker">
+      <summary id="boardSummary">选择版面</summary>
+      <input id="boardSearch" type="search" placeholder="搜索版面，如：学习天地">
+      <div id="boardOptions" aria-label="可过滤版面"></div>
+    </details>
     <label>过滤阈值 <output id="filterValue"></output><input id="filterThreshold" type="range" min="0.35" max="0.95" step="0.01"></label>
     <p>首次启用模型会下载约 24 MB 权重，之后使用浏览器缓存。</p>
     <button id="resetOverrides" type="button">清除“以后保留”记录</button>

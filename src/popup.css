@@ -1,4 +1,4 @@
-body { width: 300px; margin: 0; color: #234; font: 14px/1.45 system-ui, sans-serif; background: #f6fbfd; }
+body { width: 360px; margin: 0; color: #234; font: 14px/1.45 system-ui, sans-serif; background: #f6fbfd; }
 main { padding: 14px; }
 h1 { margin: 0 0 12px; font-size: 18px; }
 label { display: block; margin: 10px 0; }
@@ -7,3 +7,11 @@ output { float: right; font-variant-numeric: tabular-nums; }
 p { color: #617580; font-size: 12px; }
 button { width: 100%; padding: 7px; border: 1px solid #9fc8d5; border-radius: 5px; background: white; color: #245d70; cursor: pointer; }
 #status { min-height: 20px; margin-top: 8px; color: #287046; }
+#boardPicker { margin: 8px 0 12px; border: 1px solid #b8d5de; border-radius: 6px; background: white; }
+#boardPicker summary { padding: 8px 10px; cursor: pointer; color: #245d70; }
+#boardSearch { box-sizing: border-box; width: calc(100% - 16px); margin: 0 8px 7px; padding: 6px 8px; border: 1px solid #b8d5de; border-radius: 4px; }
+#boardOptions { max-height: 250px; overflow: auto; padding: 0 8px 8px; }
+.board-group { margin: 7px 0 3px; color: #617580; font-size: 12px; font-weight: 600; }
+.board-option { margin: 2px 0; padding: 2px 3px; border-radius: 3px; }
+.board-option:hover { background: #eef8fb; }
+.board-empty { padding: 8px 3px; color: #7b8d95; }

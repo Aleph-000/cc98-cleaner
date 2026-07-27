@@ -37,6 +37,10 @@ for (const name of ['manifest.json']) {
 for (const name of ['page-patch.js', 'content.css', 'popup.html', 'popup.css', 'popup.js']) {
   await cp(path.join(root, 'src', name), path.join(dist, name));
 }
+await cp(
+  path.join(root, 'data', 'board-catalog.json'),
+  path.join(dist, 'board-catalog.json'),
+);
 
 await cp(
   path.join(root, 'node_modules', 'onnxruntime-web', 'dist', 'ort-wasm-simd.wasm'),
