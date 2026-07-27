@@ -2,8 +2,10 @@ import { env, pipeline } from '@xenova/transformers';
 import classifier from '../data/classifier.json';
 import seedEmbeddings from '../data/seed-embeddings.json';
 
-env.allowLocalModels = false;
-env.useBrowserCache = true;
+env.allowLocalModels = true;
+env.allowRemoteModels = false;
+env.localModelPath = chrome.runtime.getURL('models/');
+env.useBrowserCache = false;
 env.backends.onnx.wasm.numThreads = 1;
 env.backends.onnx.wasm.wasmPaths = chrome.runtime.getURL('wasm/');
 

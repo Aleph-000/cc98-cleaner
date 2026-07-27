@@ -41,6 +41,7 @@ await cp(
   path.join(root, 'data', 'board-catalog.json'),
   path.join(dist, 'board-catalog.json'),
 );
+await cp(path.join(root, 'models'), path.join(dist, 'models'), { recursive: true });
 
 await cp(
   path.join(root, 'node_modules', 'onnxruntime-web', 'dist', 'ort-wasm-simd.wasm'),

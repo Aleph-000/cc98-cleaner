@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -10,9 +10,25 @@ const contentJs = await readFile(path.join(root, 'dist', 'content.js'), 'utf8');
 const backgroundJs = await readFile(path.join(root, 'dist', 'background.js'), 'utf8');
 const pagePatchJs = await readFile(path.join(root, 'dist', 'page-patch.js'), 'utf8');
 const boardCatalog = JSON.parse(await readFile(path.join(root, 'dist', 'board-catalog.json'), 'utf8'));
+const localModel = path.join(
+  root,
+  'dist',
+  'models',
+  'Xenova',
+  'bge-small-zh-v1.5',
+  'onnx',
+  'model_quantized.onnx',
+);
 
 if (manifest.manifest_version !== 3) throw new Error('manifest_version must be 3');
 if (!manifest.background?.service_worker) throw new Error('background service worker missing');
+if (manifest.host_permissions?.some((value) => !value.includes('cc98.org'))) {
+  throw new Error('unexpected non-CC98 host permission');
+}
+if (!backgroundJs.includes('allowRemoteModels=!1') && !backgroundJs.includes('allowRemoteModels = false')) {
+  throw new Error('remote model loading must be disabled');
+}
+if ((await stat(localModel)).size < 20_000_000) throw new Error('bundled local BGE model is missing or incomplete');
 if (manifest.content_scripts?.length !== 2) throw new Error('expected two content scripts');
 if (!popupHtml.includes('id="showHiddenNotice"')) throw new Error('hidden-comment notice setting missing');
 if (!popupHtml.includes('id="filterThreshold"')) throw new Error('single filter threshold setting missing');
