@@ -34,12 +34,24 @@ npm run check
 
 构建结果位于 `dist/`。
 
-## Edge 安装
+## 从 Release 安装
 
-1. 打开 `edge://extensions`；
-2. 开启“开发人员模式”；
-3. 点击“加载解压缩的扩展”；
-4. 选择仓库中的 `dist` 文件夹。
+浏览器不能直接加载 ZIP 文件，需要先解压一次；之后更新版本时重复以下步骤即可。
+
+### Microsoft Edge
+
+1. 打开 [Releases](https://github.com/Aleph-000/cc98-cleaner/releases)，下载最新版 `cc98-cleaner-v*.zip`；
+2. 右键 ZIP 文件并选择“全部解压缩”；
+3. 在 Edge 打开 `edge://extensions`，开启“开发人员模式”；
+4. 点击“加载解压缩的扩展”，选择刚解压且包含 `manifest.json` 的文件夹。
+
+### Google Chrome
+
+1. 下载并解压同一个 Release ZIP；
+2. 在 Chrome 打开 `chrome://extensions`，开启“开发者模式”；
+3. 点击“加载已解压的扩展程序”，选择包含 `manifest.json` 的文件夹。
+
+安装完成后，建议将扩展固定到工具栏，打开设置并选择需要过滤的版面。不要删除已加载的解压文件夹，否则浏览器可能无法继续使用或更新扩展。
 
 ## 隐私
 
