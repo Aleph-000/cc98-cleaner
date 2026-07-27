@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CC98 Cleaner</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <h1>CC98 Cleaner</h1>
+    <label><input id="enabled" type="checkbox"> 启用评论清理</label>
+    <label><input id="modelEnabled" type="checkbox"> 启用本地 BGE 模型</label>
+    <label><input id="hideNegativeRatings" type="checkbox"> 隐藏“风评值 -1”记录</label>
+    <label><input id="showHiddenNotice" type="checkbox"> 显示被隐藏评论的提示和查看按钮</label>
+    <label>过滤阈值 <output id="filterValue"></output><input id="filterThreshold" type="range" min="0.35" max="0.95" step="0.01"></label>
+    <p>首次启用模型会下载约 24 MB 权重，之后使用浏览器缓存。</p>
+    <button id="resetOverrides" type="button">清除“以后保留”记录</button>
+    <div id="status" role="status"></div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

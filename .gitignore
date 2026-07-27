@@ -1,0 +1,20 @@
+node_modules/
+*.zip
+*.log
+.DS_Store
+Thumbs.db
+.env*
+*.har
+
+# Only publish derived numeric model artifacts, never collected forum text.
+data/*
+!data/classifier.json
+!data/seed-embeddings.json
+!data/short-phrase-rules.json
+*posts*.txt
+*comments*.json
+*labels*.json
+*prompts*.json
+*raw*.json
+run-log*.md
+reference-*.txt

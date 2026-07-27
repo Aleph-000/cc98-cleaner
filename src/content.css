@@ -1,0 +1,38 @@
+.cc98-cleaner-placeholder {
+  box-sizing: border-box;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid #b9dbe6;
+  border-radius: 6px;
+  color: #456;
+  background: #f4fbfd;
+  font-size: 13px;
+}
+
+.cc98-cleaner-placeholder button {
+  margin-left: 8px;
+  border: 1px solid #9fc8d5;
+  border-radius: 4px;
+  padding: 2px 8px;
+  background: white;
+  color: #356b7c;
+  cursor: pointer;
+}
+
+.cc98-cleaner-placeholder .cc98-cleaner-reason {
+  opacity: 0.72;
+}
+
+.cc98-cleaner-model-error {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2147483647;
+  max-width: 360px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: #7b3f00;
+  background: #fff4db;
+  box-shadow: 0 2px 12px #0002;
+  font-size: 12px;
+}
