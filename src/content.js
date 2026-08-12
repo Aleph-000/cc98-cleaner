@@ -199,8 +199,8 @@ function hideNegativeRatings(root = document) {
 }
 
 function scan(root = document) {
-  if (!filterActive) return;
   hideNegativeRatings(root);
+  if (!filterActive) return;
   const replies = [
     ...(root.matches?.('div.reply') ? [root] : []),
     ...(root.querySelectorAll?.('div.reply') || []),
@@ -260,7 +260,7 @@ async function start() {
   const local = await chrome.storage.local.get({ overrides: {} });
   overrides = local.overrides || {};
   filterActive = settings.enabled && boardIsSelected();
-  if (filterActive) scan();
+  scan();
   new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.type === 'attributes') {

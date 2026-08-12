@@ -7,6 +7,7 @@ const manifest = JSON.parse(await readFile(path.join(root, 'dist', 'manifest.jso
 const popupHtml = await readFile(path.join(root, 'dist', 'popup.html'), 'utf8');
 const popupJs = await readFile(path.join(root, 'dist', 'popup.js'), 'utf8');
 const contentJs = await readFile(path.join(root, 'dist', 'content.js'), 'utf8');
+const contentSource = await readFile(path.join(root, 'src', 'content.js'), 'utf8');
 const backgroundJs = await readFile(path.join(root, 'dist', 'background.js'), 'utf8');
 const pagePatchJs = await readFile(path.join(root, 'dist', 'page-patch.js'), 'utf8');
 const boardCatalog = JSON.parse(await readFile(path.join(root, 'dist', 'board-catalog.json'), 'utf8'));
@@ -43,6 +44,12 @@ if (!noticeDefaultsOff(popupJs)) throw new Error('hidden-comment notice must def
 if (!noticeDefaultsOff(contentJs)) throw new Error('content default must hide without a notice');
 if (/cc98CleanerDecision\s*=\s*["']fold/.test(contentJs)) throw new Error('fold decision must be removed');
 if (`${contentJs}${backgroundJs}`.includes('近似')) throw new Error('nearest-example text must not be exposed');
+if (!/function scan\([^)]*\)\s*\{\s*hideNegativeRatings\(root\);\s*if \(!filterActive\) return;/.test(contentSource)) {
+  throw new Error('negative ratings must be hidden before the board-specific comment filter');
+}
+if (!/filterActive = settings\.enabled && boardIsSelected\(\);\s*scan\(\);/.test(contentSource)) {
+  throw new Error('global cleanup must scan even when the current board is not selected');
+}
 const boards = boardCatalog.groups.flatMap((group) => group.boards);
 if (!boards.some((board) => board.id === 68 && board.name === '学习天地')) {
   throw new Error('board catalog must include 学习天地 (68)');

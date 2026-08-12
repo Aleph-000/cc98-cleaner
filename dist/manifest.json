@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CC98 Cleaner",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "隐藏负面风评、清零踩数，并在本地识别和过滤戾气评论。",
   "permissions": [
     "storage"

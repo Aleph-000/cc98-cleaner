@@ -1,6 +1,6 @@
 {
   "name": "cc98-cleaner",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "description": "A local Edge/Chrome extension for filtering hostile CC98 comments.",
   "type": "module",
