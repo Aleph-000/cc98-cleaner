@@ -50,6 +50,11 @@ if (!/function scan\([^)]*\)\s*\{\s*hideNegativeRatings\(root\);\s*if \(!filterA
 if (!/filterActive = settings\.enabled && boardIsSelected\(\);\s*scan\(\);/.test(contentSource)) {
   throw new Error('global cleanup must scan even when the current board is not selected');
 }
+if (!/function isOpeningPost\(reply\)/.test(contentSource)
+    || !/if \(isOpeningPost\(reply\)\)/.test(contentSource)
+    || !/opening-post/.test(contentSource)) {
+  throw new Error('topic opening post must bypass comment filtering');
+}
 const boards = boardCatalog.groups.flatMap((group) => group.boards);
 if (!boards.some((board) => board.id === 68 && board.name === '学习天地')) {
   throw new Error('board catalog must include 学习天地 (68)');

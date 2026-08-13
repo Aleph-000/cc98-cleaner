@@ -115,6 +115,12 @@ function modelTexts(text) {
   return [...unique].slice(0, 4);
 }
 
+function isOpeningPost(reply) {
+  const match = location.pathname.match(/\/topic\/\d+(?:\/(\d+))?\/?$/i);
+  if (!match || (match[1] && Number(match[1]) !== 1)) return false;
+  return reply === document.querySelector('div.reply');
+}
+
 function queueModel(item) {
   queued.push({ id: item.id, texts: modelTexts(item.text) });
   pending.set(item.id, item);
@@ -157,6 +163,10 @@ function showModelError(error) {
 
 function processReply(reply) {
   if (!settings.enabled || !filterActive || reply.dataset.cc98CleanerQueued) return;
+  if (isOpeningPost(reply)) {
+    reply.dataset.cc98CleanerDecision = 'opening-post';
+    return;
+  }
   const text = extractReplyText(reply);
   if (!text) return;
 
